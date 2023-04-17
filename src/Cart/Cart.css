@@ -1,0 +1,23 @@
+.cart{
+  background:linear-gradient(0deg, #ffe0b3, #ffe0b3);
+  padding:25px;
+  position: sticky;
+  top: 50px;
+  border: 2px solid #333;
+  border-radius:2px;
+}
+.cart h3{
+  text-align: center;
+}
+.btn-clear-cart{
+  display: flex;
+  justify-content: space-between;
+  width:90%;
+  margin: 10px auto;
+  background:#FF3030;
+  border-radius:4px;
+  color:#fff;
+  height:56px;
+  font-size:21px;
+  align-items: center;
+}
