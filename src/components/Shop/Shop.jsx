@@ -73,14 +73,14 @@ const Shop = () => {
     }
 
     // useEffect(() => {
-    //     fetch("http://localhost:4000/products")
+    //     fetch("https://simple-emajohn-site-server.vercel.app/products")
     //         .then((res) => res.json())
     //         .then((data) => setProducts(data));
     // }, []);
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(`http://localhost:4000/products?page=${current}&limit=${itemsPerpage}`)
+            const response = await fetch(`https://simple-emajohn-site-server.vercel.app/products?page=${current}&limit=${itemsPerpage}`)
             const data = await response.json()
             setProducts(data)
         }
@@ -91,7 +91,7 @@ const Shop = () => {
         const storeCart = getShoppingCart()
         const ids = Object.keys(storeCart)
         // console.log(ids);
-        fetch('http://localhost:4000/productById', {
+        fetch('https://simple-emajohn-site-server.vercel.app/productById', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
