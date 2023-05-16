@@ -72,11 +72,20 @@ const Shop = () => {
         })
     }
 
+    // useEffect(() => {
+    //     fetch("http://localhost:4000/products")
+    //         .then((res) => res.json())
+    //         .then((data) => setProducts(data));
+    // }, []);
+
     useEffect(() => {
-        fetch("http://localhost:4000/products")
-            .then((res) => res.json())
-            .then((data) => setProducts(data));
-    }, []);
+        const fetchData = async () => {
+            const response = await fetch(`http://localhost:4000/products?page=${current}&limit=${itemsPerpage}`)
+            const data = await response.json()
+            setProducts(data)
+        }
+        fetchData()
+      },[current,itemsPerpage])
 
     useEffect(() => {
         const storeCart = getShoppingCart()
