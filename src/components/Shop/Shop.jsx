@@ -85,23 +85,35 @@ const Shop = () => {
             setProducts(data)
         }
         fetchData()
-      },[current,itemsPerpage])
+    }, [current, itemsPerpage])
 
     useEffect(() => {
         const storeCart = getShoppingCart()
+        const ids = Object.keys(storeCart)
+        // console.log(ids);
+        fetch('http://localhost:4000/productById', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(ids)
+        })
+            .then(res => res.json())
+            .then(cartProducts => {
+                let saveCart = []
+                for (const id in storeCart) {
+                    const addedProduct = cartProducts.find(pd => pd._id === id)
+                    if (addedProduct) {
+                        const quantity = storeCart[id]
+                        addedProduct.quantity = quantity
+                        saveCart.push(addedProduct)
+                    }
+                }
+                setCart(saveCart)
+            })
         // console.log(storeCart);
-        let saveCart = []
-        for (const id in storeCart) {
-            const addedProduct = products.find(pd => pd._id === id)
-            if (addedProduct) {
-                const quantity = storeCart[id]
-                addedProduct.quantity = quantity
-                saveCart.push(addedProduct)
-            }
-        }
-        setCart(saveCart)
 
-    }, [products])
+    }, [])
 
     return (
         <>
@@ -130,7 +142,7 @@ const Shop = () => {
             {/* ====pagination===== */}
             <div className="pagination">
                 <p>Current Number Is:{current}</p>
-                {pageNumbers.map(number => <button className={current===number?'selected':''} onClick={() => setCurrent(number)} key={number}>{number}</button>)}
+                {pageNumbers.map(number => <button className={current === number ? 'selected' : ''} onClick={() => setCurrent(number)} key={number}>{number}</button>)}
                 <select value={itemsPerpage} onChange={handleSelectChange}>
                     {options.map(option => <option key={option} value={option}>
                         {option}
