@@ -8,20 +8,28 @@ import { addToDb, deleteShoppingCart, getShoppingCart } from "../../utilities/fa
 import Product from "../Product/Product";
 import "./Shop.css";
 const Shop = () => {
+    const [current, setCurrent] = useState(0)
+    const [itemsPerpage, setItemsPerpage] = useState(10)
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
     const { totalProducts } = useLoaderData()
-    const itemsPerpage = 10
-    const totalPages = Math.ceil(totalProducts/itemsPerpage)
+    // const itemsPerpage = 10
+    const totalPages = Math.ceil(totalProducts / itemsPerpage)
     console.log(totalProducts, totalPages)
 
     // const pageNumbers = []
     // for (let i = 0; i < 10; i++){
     //     pageNumbers.push(i)
     // }
-    // console.log(pageNumbers);
 
+    const pageNumbers = [...Array(totalPages).keys()]
+    console.log(pageNumbers);
 
+    const options = [5, 10, 15, 20]
+    const handleSelectChange = (event) => {
+        setItemsPerpage(event.target.value)
+        setCurrent(0)
+    }
 
     const handleAddToCart = (product) => {
         let newCart = []
@@ -59,9 +67,9 @@ const Shop = () => {
                     'success',
                     setCart([]),
                     deleteShoppingCart()
-                  )
-              }
-          })
+                )
+            }
+        })
     }
 
     useEffect(() => {
@@ -87,28 +95,40 @@ const Shop = () => {
     }, [products])
 
     return (
-        <div className="shop-container">
-            <div className="products-container">
-                {products.map((product) => (
-                    <Product
-                        key={product._id}
-                        product={product}
-                        handleAddToCart={handleAddToCart}
-                    ></Product>
-                ))}
-            </div>
-            <div className="cart-container">
-                <Cart handleClearCart={handleClearCart} cart={cart}>
-                    <Link className="proced-link" to="/orders">
-                        <button className='btn-processed'>
-                            <span>Review Order</span>
-                            <FontAwesomeIcon icon={faArrowRight} />
-                        </button>
+        <>
+            <div className="shop-container">
+                <div className="products-container">
+                    {products.map((product) => (
+                        <Product
+                            key={product._id}
+                            product={product}
+                            handleAddToCart={handleAddToCart}
+                        ></Product>
+                    ))}
+                </div>
+                <div className="cart-container">
+                    <Cart handleClearCart={handleClearCart} cart={cart}>
+                        <Link className="proced-link" to="/orders">
+                            <button className='btn-processed'>
+                                <span>Review Order</span>
+                                <FontAwesomeIcon icon={faArrowRight} />
+                            </button>
 
-                    </Link>
-                </Cart>
+                        </Link>
+                    </Cart>
+                </div>
             </div>
-        </div>
+            {/* ====pagination===== */}
+            <div className="pagination">
+                <p>Current Number Is:{current}</p>
+                {pageNumbers.map(number => <button className={current===number?'selected':''} onClick={() => setCurrent(number)} key={number}>{number}</button>)}
+                <select value={itemsPerpage} onChange={handleSelectChange}>
+                    {options.map(option => <option key={option} value={option}>
+                        {option}
+                    </option>)}
+                </select>
+            </div>
+        </>
     );
 };
 
