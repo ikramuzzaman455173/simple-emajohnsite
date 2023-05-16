@@ -1,7 +1,7 @@
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
 import Cart from "../../Cart/Cart";
 import { addToDb, deleteShoppingCart, getShoppingCart } from "../../utilities/fakedb";
@@ -10,11 +10,23 @@ import "./Shop.css";
 const Shop = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
+    const { totalProducts } = useLoaderData()
+    const itemsPerpage = 10
+    const totalPages = Math.ceil(totalProducts/itemsPerpage)
+    console.log(totalProducts, totalPages)
+
+    // const pageNumbers = []
+    // for (let i = 0; i < 10; i++){
+    //     pageNumbers.push(i)
+    // }
+    // console.log(pageNumbers);
+
+
 
     const handleAddToCart = (product) => {
         let newCart = []
         // newCart = [...cart, product]
-        const existsProduct = cart.find(pd => pd.id === product.id)
+        const existsProduct = cart.find(pd => pd._id === product._id)
         if (!existsProduct) {
             product.quantity = 1
             newCart = [...cart, product]
@@ -22,12 +34,12 @@ const Shop = () => {
         } else {
             // console.log(existsProduct, 'existsProduct else part');
             existsProduct.quantity = existsProduct.quantity + 1
-            const remainingProduct = cart.filter(pd => pd.id !== product.id)
+            const remainingProduct = cart.filter(pd => pd._id !== product._id)
             newCart = [...remainingProduct, existsProduct]
             // console.log(newCart = [...remainingProduct, existsProduct],'Filter product');
         };
         setCart(newCart)
-        addToDb(product.id)
+        addToDb(product._id)
     };
 
     const handleClearCart = () => {
@@ -53,7 +65,7 @@ const Shop = () => {
     }
 
     useEffect(() => {
-        fetch("products.json")
+        fetch("http://localhost:4000/products")
             .then((res) => res.json())
             .then((data) => setProducts(data));
     }, []);
@@ -63,7 +75,7 @@ const Shop = () => {
         // console.log(storeCart);
         let saveCart = []
         for (const id in storeCart) {
-            const addedProduct =products.find(pd => pd.id === id)
+            const addedProduct = products.find(pd => pd._id === id)
             if (addedProduct) {
                 const quantity = storeCart[id]
                 addedProduct.quantity = quantity
@@ -79,7 +91,7 @@ const Shop = () => {
             <div className="products-container">
                 {products.map((product) => (
                     <Product
-                        key={product.id}
+                        key={product._id}
                         product={product}
                         handleAddToCart={handleAddToCart}
                     ></Product>

@@ -1,0 +1,24 @@
+.loading-animation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loading-animation {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 5px solid #eb3d6b;
+  border-top-color: transparent;
+  animation: loadingAnimation 1s linear infinite;
+}
+
+@keyframes loadingAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

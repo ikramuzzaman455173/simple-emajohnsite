@@ -12,7 +12,7 @@ const Orders = () => {
   const saveCart = useLoaderData()
   const [cart, setCart] = useState(saveCart)
   const handleRemoveCart = (id) => {
-    const remainingProduct = cart.filter(product => product.id !== id)
+    const remainingProduct = cart.filter(product => product._id !== id)
     // console.log('remainingProduct:',remainingProduct);
     if (remainingProduct) {
       setCart(remainingProduct)
@@ -47,7 +47,7 @@ const Orders = () => {
   return (
     <div className='shop-container'>
       <div className="review-container">
-        {cart.map(product=><OrderItem product={product} key={product.id} handleRemoveCart={handleRemoveCart} />)}
+        {cart.map(product=><OrderItem product={product} key={product._id} handleRemoveCart={handleRemoveCart} />)}
       </div>
       <div className="saveCart-container">
         <Cart cart={cart} handleClearCart={handleClearCart}>
